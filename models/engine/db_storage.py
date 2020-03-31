@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """DBstorage"""
-from sqlalchemy import (create_engine)
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session
 import os
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 from models.user import User
 from models.state import State
 from models.city import City
@@ -22,16 +22,16 @@ def get_url():
     # drop tables if HBNB_ENV = test
     value4 = os.getenv("HBNB_ENV")
 
-    if value4 = "test":
+    if value4 == 'test':
         Base.metadata.drop_all(self.__engine)
 
-    u = "mysql+pymysql://{}:{}@{}:3306/{}"\
+    u = 'mysql+mysqldb://{}:{}@{}:3306/{}'\
         .format(value, value1, value2, value3)
 
     return u
 
 
-class DBstorage():
+class DBStorage():
     """Engine Creator"""
     __engine = None
     __session = None
@@ -78,6 +78,6 @@ class DBstorage():
         """
         Session_new = sessionmaker(expire_on_commit=False)
         Session_new.configure(bind=self.__engine)
-        Session = scoped_session(session_new)
+        Session = scoped_session(Session_new)
         self.__session = Session()
         Base.metadata.create_all(self.__engine)
