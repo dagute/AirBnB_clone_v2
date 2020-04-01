@@ -42,7 +42,7 @@ class DBStorage():
     def all(self, cls=None):
         """ALL function"""
         """ table = [User, State, City, Amenity, Place, Review] """
-        table = [State, City, User]
+        table = [State, City, User, Place]
         new_dict = {}
         if cls is not None:
             data = eval(cls)
