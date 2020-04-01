@@ -19,6 +19,6 @@ class State(BaseModel, Base):
     @property
     def cities(self):
         """Getter"""
-        my_cities = [value for key, value in models.storage.all().items()
-                     if 'City' in key and value.state_id == self.id]
-        return my_cities
+        """ my_cities = [value for key, value in models.storage.all().items()
+                     if 'City' in key and value.state_id == self.id] """
+        return self.cities

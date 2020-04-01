@@ -19,11 +19,6 @@ def get_url():
     value1 = os.getenv("HBNB_MYSQL_PWD")
     value2 = os.getenv("HBNB_MYSQL_HOST")
     value3 = os.getenv("HBNB_MYSQL_DB")
-    # drop tables if HBNB_ENV = test
-    value4 = os.getenv("HBNB_ENV")
-
-    if value4 == 'test':
-        Base.metadata.drop_all(self.__engine)
 
     u = 'mysql+mysqldb://{}:{}@{}:3306/{}'\
         .format(value, value1, value2, value3)
@@ -40,23 +35,30 @@ class DBStorage():
         """Init"""
         self.__engine = create_engine(get_url(), pool_pre_ping=True)
 
+        value4 = os.getenv("HBNB_ENV")
+        if value4 == 'test':
+            Base.metadata.drop_all(self.__engine)
+
     def all(self, cls=None):
         """ALL function"""
+        """ table = [User, State, City, Amenity, Place, Review] """
+        table = [State, City]
         new_dict = {}
         if cls is not None:
-            for data in self.__session.query(cls).all():
-                key = str(cls) + "." + str(data.id)
-                new_dict[key] = data.__dict__
+            data = eval(cls)
+            all_data = self.__session.query(data)
+            for row in all_data:
+                del row.__dict__["_sa_instance_state"]
+                key = cls + "." + row.id
+                new_dict[key] = row
             return new_dict
 
         else:
-            my_class = ['User', 'State', 'City', 'Amenity', 'Place', 'Review']
-
-            for idx_class in my_class:
-                rows = self.__session.query(idx_class).all()
-                for data_convert in rows:
-                    key = idx_class + "." + str(data_convert.id)
-                    new_dict[key] = data_convert.__dict__
+            for indx in table:
+                for obj in self.__session.query(indx):
+                    del obj.__dict__["_sa_instance_state"]
+                    key = indx.__class__.__name__ + "." + obj.id
+                    new_dict[key] = obj
                 return new_dict
 
     def new(self, obj):
@@ -71,6 +73,7 @@ class DBStorage():
         """Delete objects from the current session"""
         if obj is not None:
             self.__session.delete(obj)
+            self.save()
 
     def reload(self):
         """create all tables in the database
