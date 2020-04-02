@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 """This is the place class"""
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, ForeignKey, Integer, Float
+from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship, backref
+from os import getenv
+
 
 class Place(BaseModel, Base):
     """This is the class for Place
@@ -32,9 +34,36 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     amenity_ids = []
-    reviews = relationship("Review", backref="place", cascade="all, delete")
 
-    @property
-    def reviews(self):
-        """Getter"""
-        return self.reviews
+    metadata = Base.metadata
+    place_amenity = Table('place_amenity', metadata,
+                          Column('place_id', String(60),
+                                 ForeignKey('places.id'),
+                                 primary_key=True, nullable=False),
+                          Column('amenity_id', String(60),
+                                 ForeignKey('amenities.id'),
+                                 primary_key=True, nullable=False))
+
+    if getenv("HBNB_TYPE_STORAGE") == 'db':
+        reviews = relationship("Review", backref="place",
+                               cascade="all, delete")
+        amenities = relationship('Amenity',
+                                 secondary=place_amenity,
+                                 viewonly=False,
+                                 back_populates='place_amenities')
+    else:
+        @property
+        def reviews(self):
+            """Getter"""
+            return self.reviews
+
+        @property
+        def amenities(self):
+            """Getter"""
+            return self.amenity_ids
+
+        @amenities.setter
+        def amenities(self, value):
+            """Setter"""
+            if isinstance(value, Amenity):
+                self.amenity_ids.append(value.id)
