@@ -125,9 +125,9 @@ class HBNBCommand(cmd.Cmd):
         Exceptions:
             NameError: when there is no object taht has the name
         """
+        objects = storage.all(line)
         my_list = []
         if not line:
-            objects = storage.all()
             for key in objects:
                 my_list.append(objects[key])
             print(my_list)
@@ -136,7 +136,6 @@ class HBNBCommand(cmd.Cmd):
             args = line.split(" ")
             if args[0] not in self.all_classes:
                 raise NameError()
-            objects = storage.all(line)
             for key in objects:
                 name = key.split('.')
                 if name[0] == args[0]:
