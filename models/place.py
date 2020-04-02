@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 """This is the place class"""
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, ForeignKey, Integer, Float
+from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship, backref
+
 
 class Place(BaseModel, Base):
     """This is the class for Place
@@ -38,3 +39,30 @@ class Place(BaseModel, Base):
     def reviews(self):
         """Getter"""
         return self.reviews
+
+    metadata = Base.metadata
+    place_amenity = Table('place_amenity', metadata,
+                          Column('place_id', String(60),
+                                 ForeignKey('places.id'),
+                                 primary_key=True, nullable=False),
+                          Column('amenity_id', String(60),
+                                 ForeignKey('amenities.id'),
+                                 primary_key=True, nullable=False))
+
+    amenities = relationship('Amenity',
+                             secondary=place_amenity, viewonly=False, back_populates='place_amenities')
+
+    @property
+    def amenities(self):
+        """Getter"""
+        my_list = []
+        for objects in self.amenity_ids:
+            if objects.id == self.id:
+                my_list.append(objects)
+        return my_list
+
+    @amenities.setter
+    def amenities(self, value):
+        """Setter"""
+        if isinstance(value, Amenity):
+            self.amenity_ids.append(value.id)

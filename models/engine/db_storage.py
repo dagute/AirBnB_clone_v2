@@ -42,7 +42,7 @@ class DBStorage():
     def all(self, cls=None):
         """ALL function"""
         """ table = [User, State, City, Amenity, Place, Review] """
-        table = [State, City, User, Place]
+        table = [State, City, User, Place, Amenity, Review]
         new_dict = {}
         if cls is not None:
             data = eval(cls)
@@ -64,6 +64,7 @@ class DBStorage():
     def new(self, obj):
         """Function that add new objects in current session"""
         self.__session.add(obj)
+        self.save()
 
     def save(self):
         """Commit all the changes in the current session"""
