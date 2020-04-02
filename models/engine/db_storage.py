@@ -42,7 +42,7 @@ class DBStorage():
     def all(self, cls=None):
         """ALL function"""
         """ table = [User, State, City, Amenity, Place, Review] """
-        table = [State, City, User, Place, Amenity, Review]
+        table = [State, City, User, Place]
         new_dict = {}
         if cls is not None:
             data = eval(cls)
@@ -64,7 +64,6 @@ class DBStorage():
     def new(self, obj):
         """Function that add new objects in current session"""
         self.__session.add(obj)
-        self.save()
 
     def save(self):
         """Commit all the changes in the current session"""
@@ -84,4 +83,4 @@ class DBStorage():
         Session_new.configure(bind=self.__engine)
         Session = scoped_session(Session_new)
         self.__session = Session()
-        Base.metadata.create_all(bind=self.__engine)
+        Base.metadata.create_all(self.__engine)
