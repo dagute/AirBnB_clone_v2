@@ -61,10 +61,11 @@ class Place(BaseModel, Base):
         @property
         def amenities(self):
             """Getter"""
-            data = models.storage.all('Amenity')
+            data = models.storage.all()
             new_list = []
             for idx in data:
-                if idx.place_id == self.id:
+                if idx.place_id == self.id and \
+                   isinstance(idx, Amenity):
                     new_list.append(idx)
             return new_list
 
