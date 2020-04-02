@@ -4,6 +4,7 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship, backref
 from os import getenv
+import models
 
 
 class Place(BaseModel, Base):
@@ -60,10 +61,15 @@ class Place(BaseModel, Base):
         @property
         def amenities(self):
             """Getter"""
+            data = models.storage.all()
+            for idx in data:
+                if idx.place_id == self.id and \
+                   isinstance(idx, Amenity):
+                    self.amenity_ids.append(idx)
             return self.amenity_ids
 
         @amenities.setter
         def amenities(self, value):
             """Setter"""
             if isinstance(value, Amenity):
-                self.amenity_ids.append(value.id)
+                self.amenity_ids.append(value.amenities.id)
