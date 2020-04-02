@@ -136,7 +136,7 @@ class HBNBCommand(cmd.Cmd):
             args = line.split(" ")
             if args[0] not in self.all_classes:
                 raise NameError()
-            objects = storage.all(args[0])
+            objects = storage.all(line)
             for key in objects:
                 name = key.split('.')
                 if name[0] == args[0]:
