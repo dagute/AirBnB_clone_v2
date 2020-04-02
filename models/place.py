@@ -62,11 +62,12 @@ class Place(BaseModel, Base):
         def amenities(self):
             """Getter"""
             data = models.storage.all()
+            new_list = []
             for idx in data:
                 if idx.place_id == self.id and \
                    isinstance(idx, Amenity):
-                    self.amenity_ids.append(idx)
-            return self.amenity_ids
+                    new_list.append(idx)
+            return new_list
 
         @amenities.setter
         def amenities(self, value):
