@@ -48,7 +48,6 @@ class DBStorage():
             data = eval(cls)
             all_data = self.__session.query(data)
             for row in all_data:
-                del row.__dict__["_sa_instance_state"]
                 key = cls + "." + row.id
                 new_dict[key] = row
             return new_dict
@@ -56,7 +55,6 @@ class DBStorage():
         else:
             for indx in table:
                 for obj in self.__session.query(indx):
-                    del obj.__dict__["_sa_instance_state"]
                     key = indx.__class__.__name__ + "." + obj.id
                     new_dict[key] = obj
                 return new_dict
