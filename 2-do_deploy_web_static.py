@@ -1,11 +1,22 @@
 #!/usr/bin/python3
 """Fabric script that distributes an archive to your web servers"""
-import os
+from time import strftime
 from fabric.api import *
-from datetime import datetime
+import os
 
 env.user = "ubuntu"
 env.hosts = ['34.74.118.58', '54.234.179.10']
+
+
+def do_pack():
+    """generates a .tgz archive from the contents of the web_static folder"""
+    set_up = strftime("%Y%m%d%H%M%S")
+    try:
+        local("mkdir -p versions")
+        local("tar -cvzf versions/web_static_{}.tgz web_static".format(set_up))
+        return("versions/web_static_{}.tgz".format(set_up))
+    except:
+        return(None)
 
 
 def do_deploy(archive_path):
