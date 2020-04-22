@@ -7,12 +7,12 @@
         {%- if not id %}
             <H1>States</H1>
             <UL>
-                {% for k, v in data.items()|sort(attribute="1.name") %}
+                {% for k, v in state.items()|sort(attribute="1.name") %}
                     <LI>{{ v.id }}: <B>{{ v.name }}</B></LI>
                 {% endfor %}
             </UL>
         {%- elif id %}
-            {%- for k, v in data.items() if id in v.id %}
+            {%- for k, v in state.items() if id in v.id %}
                     <H1>State: {{ v.name }}</H1>
                     <H3>Cities:</H3>
                     <UL>
