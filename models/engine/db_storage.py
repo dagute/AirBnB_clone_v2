@@ -41,14 +41,15 @@ class DBStorage():
 
     def all(self, cls=None):
         """ALL function"""
-        """ table = [User, State, City, Amenity, Place, Review] """
-        table = [State, City, User, Place]
+        table = [User, State, City, Amenity, Place, Review]
+        """table = [State, City, User, Place]"""
         new_dict = {}
         if cls is not None:
-            data = eval(cls)
-            all_data = self.__session.query(data)
+            if type(cls) is str:
+            cls = eval(cls)
+            all_data = self.__session.query(cls)
             for row in all_data:
-                key = cls + "." + row.id
+                key = cls.__name__ + "." + row.id
                 new_dict[key] = row
             return new_dict
 
@@ -85,4 +86,4 @@ class DBStorage():
 
     def close(self):
         """call remove() method on the private session attribute"""
-        self.__session.remove()
+        self.__session.close()
