@@ -12,13 +12,14 @@ def tear_down(self):
     storage.close()
 
 
+@app.route('/states', strict_slashes=False)
 @app.route('/states/<id>', strict_slashes=False)
 def states(state_id=None):
-    """display the states and cities listed in alphabetical order"""
-    states_o = storage.all("State")
+    """display html page"""
+    states = storage.all("State")
     if state_id is not None:
         state_id = 'State.' + state_id
-    return render_template('9-states.html', states_o=states_o,
+    return render_template('9-states.html', states=states,
                            state_id=state_id)
 
 if __name__ == '__main__':
