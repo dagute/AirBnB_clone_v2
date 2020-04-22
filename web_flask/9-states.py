@@ -13,14 +13,17 @@ def tear_down(self):
 
 
 @app.route('/states', strict_slashes=False)
+def Display_states():
+    """Display all states objects"""
+    state = storage.all('State')
+    return render_template('9-states.html', state=state)
+
+
 @app.route('/states/<id>', strict_slashes=False)
-def states(state_id=None):
+def states(state_id):
     """display html page"""
     states = storage.all("State")
-    if state_id is not None:
-        state_id = 'State.' + state_id
-    return render_template('9-states.html', states=states,
-                           state_id=state_id)
+    return render_template('9-states.html', states=states, state_id=state_id)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
