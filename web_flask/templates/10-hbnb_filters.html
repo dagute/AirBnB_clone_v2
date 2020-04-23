@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" type="text/css" href="styles/4-common.css">
+    <link rel="stylesheet" type="text/css" href="styles/3-header.css">
+    <link rel="stylesheet" type="text/css" href="styles/3-footer.css">
+    <link rel="stylesheet" type="text/css" href="styles/6-filters.css">
+    <link rel="icon" href="images/icon.png" />
+    <title>HBnB</title>
+  </head>
+  <body>
+        <header>
+            <div class="logo"></div>
+        </header>
+        <div class="container">
+            <section class="filters">
+                <button type="button">Search</button>
+                <div class="locations">
+                    <h3>States</h3>
+                    <h4>&nbsp</h4>
+                    <ul class="popover">
+		          <br><br>
+			      {% for k, v in states.items()|sort(attribute='1.name') %}
+			      <LI class="state">{{ v.name }}</LI>
+			                  <UL>
+                                    {% for city in v.cities|sort(attribute='name') %}
+				                <LI>{{ city.name }}</LI>
+						    {% endfor %}
+						    </UL>
+					              </LI>
+                            {% endfor %}
+                    </ul>
+</div>
+                <div class="amenities">
+                    <h3>Amenities</h3>
+                    <h4>&nbsp</h4>
+                    <ul class="popover">
+		            <br><br>
+			          {% for k, v in amenities.items()|sort(attribute='1.name') %}
+			          <LI>{{ v.name }}</LI>
+				        {% endfor %}
+                    </ul>
+                </div>
+		</div>
+            </section>
+        </div>
+        <footer>
+            Holberton School
+        </footer>
+    </body>
+</html>
