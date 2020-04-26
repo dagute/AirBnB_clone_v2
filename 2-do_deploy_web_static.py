@@ -2,7 +2,7 @@
 """Fabric script that distributes an archive to your web servers"""
 from time import strftime
 from fabric.api import *
-import os
+import os.path
 
 env.user = "ubuntu"
 env.hosts = ['104.196.221.76', '54.234.179.10']
@@ -21,7 +21,7 @@ def do_pack():
 
 def do_deploy(archive_path):
     """distributes between 2 servers"""
-    if not path.isfile(archive_path):
+    if (os.path.isfile(archive_path) is False):
         return False
 
     route = archive_path.split('/')[1]
